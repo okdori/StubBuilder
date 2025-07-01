@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.9.23" apply false
+    kotlin("jvm") version "2.2.0" apply false
 }
 
 subprojects {
@@ -11,5 +11,5 @@ subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
 
     group = "com.okdori.stubbuilder"
-    version = "1.0.0"
+    version = "0.0.1"
 }
