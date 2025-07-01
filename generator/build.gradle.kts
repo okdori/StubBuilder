@@ -7,7 +7,6 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
     implementation("com.squareup:kotlinpoet:2.2.0")
     compileOnly("org.springframework:spring-context:6.2.7") // @Service 어노테이션

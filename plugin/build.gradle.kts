@@ -15,6 +15,5 @@ gradlePlugin {
 
 dependencies {
     implementation(gradleApi())
-    implementation(kotlin("stdlib-jdk8"))
     implementation(project(":generator"))
 }
