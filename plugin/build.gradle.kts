@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm")
     id("java-gradle-plugin")
+    id("com.github.johnrengelman.shadow")
 }
 
 gradlePlugin {
@@ -16,4 +17,14 @@ gradlePlugin {
 dependencies {
     implementation(gradleApi())
     implementation(project(":generator"))
+}
+
+tasks {
+    shadowJar {
+        isZip64 = true
+    }
+}
+
+tasks.named("build") {
+    dependsOn(tasks.shadowJar)
 }
