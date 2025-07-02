@@ -29,6 +29,10 @@ tasks {
     named("assemble") {
         dependsOn(shadowJar)
     }
+
+    named("publishMavenJavaPublicationToMavenLocal") {
+        dependsOn(shadowJar)
+    }
 }
 
 publishing {
@@ -39,18 +43,7 @@ publishing {
             groupId = project.group.toString()
             artifactId = "stubbuilder-plugin"
             version = project.version.toString()
-        }
-    }
-}
-
-tasks.named("publishMavenJavaPublicationToMavenLocal") {
-    dependsOn(tasks.shadowJar)
-}
-
-gradlePlugin.plugins.forEach { plugin ->
-    publishing.publications.withType<MavenPublication> {
-        if (name == "mavenJava") {
-            from(components["java"])
+            from(components["kotlin"])
         }
     }
 }

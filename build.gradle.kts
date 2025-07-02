@@ -10,5 +10,5 @@ subprojects {
     }
 
     group = "com.github.okdori.stubbuilder"
-    version = "0.0.16"
+    version = "0.0.17"
 }
