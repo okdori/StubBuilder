@@ -23,6 +23,7 @@ dependencies {
 
 tasks {
     shadowJar {
+        archiveClassifier.set("all")
         isZip64 = true
     }
 }
