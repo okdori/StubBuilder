@@ -3,6 +3,8 @@ plugins {
     id("java-gradle-plugin")
     id("maven-publish")
     id("com.github.johnrengelman.shadow")
+    id("com.gradle.plugin-publish")
+    id("signing")
 }
 
 dependencies {
@@ -13,9 +15,14 @@ dependencies {
 gradlePlugin {
     plugins {
         create("stubBuilderPlugin") {
-            id = "com.github.okdori.stubbuilder"
+            id = "com.okdori.stubbuilder"
             // FQCN(Fully Qualified Class Name) 지정
             implementationClass = "com.okdori.stubbuilder.plugin.GenerateTestStubTask"
+
+            displayName = "StubBuilder Gradle Plugin"
+            tags.set(listOf("stub", "test", "generation", "kotlin", "automation"))
+            website = "https://github.com/okdori/StudBuilder"
+            vcsUrl = "https://github.com/okdori/StudBuilder.git"
         }
     }
 }
@@ -29,6 +36,10 @@ tasks {
     named("assemble") {
         dependsOn(shadowJar)
     }
+
+    named("publishPlugins") {
+        dependsOn(shadowJar)
+    }
 }
 
 publishing {
@@ -39,15 +50,7 @@ publishing {
             groupId = project.group.toString()
             artifactId = "stubbuilder-plugin"
             version = project.version.toString()
-
-            artifact(tasks.jar.get()) {
-                artifactId = "${project.group}.gradle.plugin"
-                classifier = ""
-            }
+            from(components["java"])
         }
     }
-}
-
-tasks.named("generateMetadataFileForMavenJavaPublication") {
-    dependsOn(tasks.shadowJar)
 }
