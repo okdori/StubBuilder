@@ -26,9 +26,10 @@ tasks {
         isZip64 = true
     }
 
-    named("assemble") {
+    named("build") {
         dependsOn(shadowJar)
     }
+
     named("publishToMavenLocal") {
         dependsOn(shadowJar)
     }
