@@ -13,7 +13,7 @@ dependencies {
 gradlePlugin {
     plugins {
         create("stubBuilderPlugin") {
-            id = "com.okdori.stubbuilder"
+            id = "com.github.okdori.stubbuilder"
             // FQCN(Fully Qualified Class Name) 지정
             implementationClass = "com.okdori.stubbuilder.plugin.GenerateTestStubTask"
         }
@@ -33,13 +33,14 @@ tasks {
 
 publishing {
     publications {
-        create("maven-public", MavenPublication::class) {
+        create<MavenPublication>("mavenJava") {
             artifact(tasks.shadowJar.get().archiveFile.get()) {
                 classifier = ""
             }
             groupId = project.group.toString()
-            artifactId = project.name
+            artifactId = "stubbuilder-plugin"
             version = project.version.toString()
+            from(components["java"])
         }
     }
 }
