@@ -39,7 +39,11 @@ publishing {
             groupId = project.group.toString()
             artifactId = "stubbuilder-plugin"
             version = project.version.toString()
-            from(components["kotlin"])
+
+            artifact(tasks.jar.get()) {
+                artifactId = "${project.group}.gradle.plugin"
+                classifier = ""
+            }
         }
     }
 }
