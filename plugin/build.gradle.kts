@@ -22,7 +22,7 @@ gradlePlugin {
 
 tasks {
     shadowJar {
-        archiveClassifier.set("all")
+        archiveClassifier.set("")
         isZip64 = true
     }
 
@@ -35,16 +35,22 @@ publishing {
     publications {
         create<MavenPublication>("mavenJava") {
             artifact(tasks.shadowJar.get().archiveFile.get()) {
-                classifier = ""
             }
             groupId = project.group.toString()
             artifactId = "stubbuilder-plugin"
             version = project.version.toString()
-            from(components["java"])
         }
     }
 }
 
 tasks.named("publishMavenJavaPublicationToMavenLocal") {
     dependsOn(tasks.shadowJar)
+}
+
+gradlePlugin.plugins.forEach { plugin ->
+    publishing.publications.withType<MavenPublication> {
+        if (name == "mavenJava") {
+            from(components["java"])
+        }
+    }
 }
