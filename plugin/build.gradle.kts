@@ -26,6 +26,10 @@ tasks {
         archiveClassifier.set("all")
         isZip64 = true
     }
+
+    named("assemble") {
+        dependsOn(shadowJar)
+    }
 }
 
 publishing {
@@ -41,6 +45,6 @@ publishing {
     }
 }
 
-tasks.named("build") {
+tasks.named("publishMavenJavaPublicationToMavenLocal") {
     dependsOn(tasks.shadowJar)
 }

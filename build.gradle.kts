@@ -12,5 +12,5 @@ subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
 
     group = "com.okdori.stubbuilder"
-    version = "0.0.6"
+    version = "0.0.7"
 }
