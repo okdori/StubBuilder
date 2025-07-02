@@ -13,7 +13,7 @@ dependencies {
 gradlePlugin {
     plugins {
         create("stubBuilderPlugin") {
-            id = "com.okdori.stubbuilder"
+            id = "com.github.okdori.stubbuilder"
             // FQCN(Fully Qualified Class Name) 지정
             implementationClass = "com.okdori.stubbuilder.plugin.GenerateTestStubTask"
         }
