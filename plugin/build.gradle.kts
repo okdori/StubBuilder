@@ -26,7 +26,7 @@ tasks {
         isZip64 = true
     }
 
-    named("build") {
+    named("assemble") {
         dependsOn(shadowJar)
     }
 
