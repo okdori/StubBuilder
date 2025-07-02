@@ -33,7 +33,7 @@ tasks {
 
 publishing {
     publications {
-        create<MavenPublication>("mavenJava") {
+        create("maven-public", MavenPublication::class) {
             artifact(tasks.shadowJar.get().archiveFile.get()) {
                 classifier = ""
             }
