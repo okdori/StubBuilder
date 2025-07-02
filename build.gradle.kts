@@ -9,6 +9,6 @@ subprojects {
         maven { url = uri("https://jitpack.io") }
     }
 
-    group = "com.github.okdori.stubbuilder"
-    version = "0.0.12"
+    group = "com.okdori.stubbuilder"
+    version = "0.0.13"
 }
