@@ -29,10 +29,6 @@ tasks {
     named("assemble") {
         dependsOn(shadowJar)
     }
-
-    named("publishMavenJavaPublicationToMavenLocal") {
-        dependsOn(shadowJar)
-    }
 }
 
 publishing {
