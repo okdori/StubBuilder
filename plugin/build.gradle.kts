@@ -29,10 +29,6 @@ tasks {
     named("assemble") {
         dependsOn(shadowJar)
     }
-
-    named("publishToMavenLocal") {
-        dependsOn(shadowJar)
-    }
 }
 
 publishing {
@@ -46,4 +42,8 @@ publishing {
             version = project.version.toString()
         }
     }
+}
+
+tasks.named("publishMavenJavaPublicationToMavenLocal") {
+    dependsOn(tasks.shadowJar)
 }
