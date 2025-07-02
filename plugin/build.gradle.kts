@@ -5,20 +5,19 @@ plugins {
     id("com.github.johnrengelman.shadow")
 }
 
+dependencies {
+    implementation(gradleApi())
+    implementation(project(":generator"))
+}
+
 gradlePlugin {
     plugins {
         create("stubBuilderPlugin") {
             id = "com.okdori.stubbuilder"
-            artifacts { id = "stubbuilder-plugin" }
             // FQCN(Fully Qualified Class Name) 지정
             implementationClass = "com.okdori.stubbuilder.plugin.GenerateTestStubTask"
         }
     }
-}
-
-dependencies {
-    implementation(gradleApi())
-    implementation(project(":generator"))
 }
 
 tasks {
@@ -28,6 +27,9 @@ tasks {
     }
 
     named("assemble") {
+        dependsOn(shadowJar)
+    }
+    named("publishToMavenLocal") {
         dependsOn(shadowJar)
     }
 }
@@ -43,8 +45,4 @@ publishing {
             version = project.version.toString()
         }
     }
-}
-
-tasks.named("publishMavenJavaPublicationToMavenLocal") {
-    dependsOn(tasks.shadowJar)
 }
