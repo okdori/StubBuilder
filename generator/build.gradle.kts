@@ -15,9 +15,15 @@ dependencies {
     implementation("io.mockk:mockk:1.14.2")
     implementation("org.junit.jupiter:junit-jupiter-api:5.13.1")
 
+    testImplementation(kotlin("test"))
     testImplementation("io.mockk:mockk:1.14.2")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.13.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.13.1")
+    testImplementation("org.assertj:assertj-core:3.26.0")
 
     compileOnly(project(":common"))
+}
+
+tasks.test {
+    useJUnitPlatform()
 }

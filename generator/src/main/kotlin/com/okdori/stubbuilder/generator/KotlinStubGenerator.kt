@@ -16,16 +16,24 @@ class KotlinStubGenerator : StubGenerator {
         val fileBuilder = FileSpec.builder(stubInfo.packageName, stubInfo.className)
         val classBuilder = TypeSpec.classBuilder(stubInfo.className)
             .addModifiers(KModifier.DATA)
+        val primaryConstructorBuilder = FunSpec.constructorBuilder()
 
-        // 필드 추가
+        // 필드 추가 - 주생성자
         stubInfo.fields.forEach { fieldInfo ->
-            val propertySpecBuilder = PropertySpec.builder(
-                name = fieldInfo.name,
-                type = getTypeFromName(fieldInfo.type)
-            ).initializer(fieldInfo.defaultValue ?: getDefaultValueForType(fieldInfo.type))
+            val propertyName = fieldInfo.name
+            val propertyType = getTypeFromName(fieldInfo.type)
+            val propertyDefaultValue = fieldInfo.defaultValue?.let { CodeBlock.of("%L", it) }
+                ?: getDefaultValueForType(fieldInfo.type)
 
-            classBuilder.addProperty(propertySpecBuilder.build())
+            primaryConstructorBuilder.addParameter(
+                ParameterSpec.builder(propertyName, propertyType)
+                    .defaultValue("%L", propertyDefaultValue)
+                    .build()
+            )
+
+            classBuilder.addProperty(PropertySpec.builder(propertyName, propertyType).initializer(propertyName).build())
         }
+        classBuilder.primaryConstructor(primaryConstructorBuilder.build())
 
         // 메서드 추가
         stubInfo.methods.forEach { methodInfo ->
@@ -45,7 +53,7 @@ class KotlinStubGenerator : StubGenerator {
         }
 
         fileBuilder.addType(classBuilder.build())
-        return fileBuilder.build().toString()
+        return fileBuilder.build().toString().replace("public ", "")
     }
 
     /**
@@ -113,22 +121,22 @@ class KotlinStubGenerator : StubGenerator {
     /**
      * 주어진 타입에 대한 기본값을 반환하는 헬퍼 함수
      */
-    private fun getDefaultValueForType(typeName: String): String {
+    private fun getDefaultValueForType(typeName: String): CodeBlock {
         return when {
-            typeName == "String" -> "\"\""
-            typeName == "Int" -> "0"
-            typeName == "Long" -> "0L"
-            typeName == "Boolean" -> "false"
-            typeName == "Double" -> "0.0"
-            typeName == "Float" -> "0.0f"
-            typeName == "Unit" -> ""
-            typeName == "Any" -> "null"
-            typeName.startsWith("List<") || typeName.startsWith("MutableList<*") -> "emptyList()"
-            typeName.startsWith("Set<") || typeName.startsWith("MutableSet<*") -> "emptySet()"
-            typeName.startsWith("Map<") || typeName.startsWith("MutableMap<*") -> "emptyMap()"
-            typeName.startsWith("java.util.Optional") -> "%T.empty()".format(ClassName("java.util", "Optional"))
-            typeName.endsWith("?") -> "null"
-            else -> "null"
+            typeName == "String" -> CodeBlock.of("\"\"")
+            typeName == "Int" -> CodeBlock.of("0")
+            typeName == "Long" -> CodeBlock.of("0L")
+            typeName == "Boolean" -> CodeBlock.of("false")
+            typeName == "Double" -> CodeBlock.of("0.0")
+            typeName == "Float" -> CodeBlock.of("0.0f")
+            typeName == "Unit" -> CodeBlock.of("")
+            typeName == "Any" -> CodeBlock.of("null")
+            typeName.startsWith("List<") || typeName.startsWith("MutableList<*") -> CodeBlock.of("emptyList()")
+            typeName.startsWith("Set<") || typeName.startsWith("MutableSet<*") -> CodeBlock.of("emptySet()")
+            typeName.startsWith("Map<") || typeName.startsWith("MutableMap<*") -> CodeBlock.of("emptyMap()")
+            typeName.startsWith("java.util.Optional") -> CodeBlock.of("%T.empty()", ClassName("java.util", "Optional"))
+            typeName.endsWith("?") -> CodeBlock.of("null")
+            else -> CodeBlock.of("null")
         }
     }
 
@@ -138,7 +146,7 @@ class KotlinStubGenerator : StubGenerator {
     private fun getDefaultMethodBodyForType(returnType: String, methodName: String): String {
         return when {
             returnType == "Unit" -> "" // Unit 반환형은 본문 없음
-            returnType.endsWith("?") || getDefaultValueForType(returnType) == "null" -> "return null" // nullable 또는 기본값이 null인 경우
+            returnType.endsWith("?") || getDefaultValueForType(returnType).toString().trim() == "null" -> "return null"
             returnType == "String" -> "return \"default-$methodName-result\""
             returnType == "Int" -> "return 0"
             returnType == "Long" -> "return 0L"
@@ -148,8 +156,8 @@ class KotlinStubGenerator : StubGenerator {
             returnType.startsWith("List<") || returnType.startsWith("MutableList<*") -> "return emptyList()"
             returnType.startsWith("Set<") || returnType.startsWith("MutableSet<*") -> "return emptySet()"
             returnType.startsWith("Map<") || returnType.startsWith("MutableMap<*") -> "return emptyMap()"
-            returnType.startsWith("java.util.Optional") -> "return %T.empty()".format(ClassName("java.util", "Optional"))
-            else -> "throw %T(\"Method '$methodName' not implemented\")".format(NotImplementedError::class) // 그 외는 NotImplementedError
+            returnType.startsWith("java.util.Optional") -> CodeBlock.of("return %T.empty()", ClassName("java.util", "Optional")).toString()
+            else -> CodeBlock.of("throw %T(\"Method '$methodName' not implemented\")", NotImplementedError::class).toString() // 그 외는 NotImplementedError
         }
     }
 }
