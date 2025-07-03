@@ -20,6 +20,7 @@ gradlePlugin {
             implementationClass = "com.okdori.stubbuilder.plugin.GenerateTestStubTask"
 
             displayName = "StubBuilder Gradle Plugin"
+            description = "Stub Builder"
             tags.set(listOf("stub", "test", "generation", "kotlin", "automation"))
             website = "https://github.com/okdori/StudBuilder"
             vcsUrl = "https://github.com/okdori/StudBuilder.git"
@@ -53,4 +54,9 @@ publishing {
             from(components["java"])
         }
     }
+}
+
+signing {
+    useGpgCmd()
+    sign(publishing.publications.getByName("mavenJava"))
 }
