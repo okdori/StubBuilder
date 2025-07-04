@@ -8,6 +8,6 @@ subprojects {
         mavenCentral()
     }
 
-    group = "com.okdori.stubbuilder.new"
+    group = "io.github.okdori.stubbuilder"
     version = "1.0.0"
 }
