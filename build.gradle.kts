@@ -1,7 +1,6 @@
 plugins {
-    kotlin("jvm") version "2.2.0" apply false
-    id("com.github.johnrengelman.shadow") version "8.1.1" apply false
-    id("com.gradle.plugin-publish") version "1.3.1" apply false
+    kotlin("jvm") version "2.0.0" apply false
+    id("com.gradle.plugin-publish") version "1.2.1" apply false
 }
 
 subprojects {
@@ -9,6 +8,6 @@ subprojects {
         mavenCentral()
     }
 
-    group = "com.okdori.stubbuilder"
-    version = "0.0.1"
+    group = "com.okdori.stubbuilder.new"
+    version = "1.0.0"
 }
