@@ -15,15 +15,20 @@ dependencies {
 gradlePlugin {
     plugins {
         create("stubBuilderPlugin") {
-            id = "com.okdori.stubbuilder"
+            id = "io.github.okdori.stubbuilder"
             // FQCN(Fully Qualified Class Name) 지정
             implementationClass = "com.okdori.stubbuilder.plugin.GenerateTestStubTask"
 
             displayName = "StubBuilder Gradle Plugin"
-            description = "Stub Builder"
+            description = """
+                This Gradle plugin automatically generates MockK-based JUnit 5 test stubs for Spring @Service and @Transactional classes.
+                It analyzes your service classes, identifies constructor dependencies for mocking, and creates a basic test structure,
+                saving development time and promoting consistent test patterns.
+                Supports automatic stub generation for create, update, delete, add, remove, and @DataMutator annotated methods.
+            """.trimIndent()
             tags.set(listOf("stub", "test", "generation", "kotlin", "automation"))
-            website = "https://github.com/okdori/StudBuilder"
-            vcsUrl = "https://github.com/okdori/StudBuilder.git"
+            website = "https://github.com/okdori/StubBuilder"
+            vcsUrl = "https://github.com/okdori/StubBuilder.git"
         }
     }
 }

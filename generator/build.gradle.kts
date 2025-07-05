@@ -22,6 +22,11 @@ dependencies {
     testImplementation("org.assertj:assertj-core:3.26.0")
 
     compileOnly(project(":common"))
+
+    testImplementation(project(":common"))
+    testImplementation("org.springframework:spring-context:6.2.7")
+    testImplementation("org.springframework:spring-tx:6.2.7")
+    testImplementation("jakarta.persistence:jakarta.persistence-api:3.1.0")
 }
 
 tasks.test {
